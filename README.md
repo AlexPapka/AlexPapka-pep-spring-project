@@ -41,7 +41,7 @@ SpringTest will verify the following
  - That your Spring Boot app leverages MVC by checking for Spring's default error message structure.
  
 The app will already be a Spring Boot app with a valid application.properties and valid database entities at the start.
-
+ 
 # User Stories
 
 ## 1: Our API should be able to process new User registrations.
