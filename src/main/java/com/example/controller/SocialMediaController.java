@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import com.example.service.AccountService;
 import com.example.service.MessageService;
 
@@ -24,18 +27,28 @@ import com.example.entity.Account;
  */ 
 @RestController
 public class SocialMediaController {
-    //AccountService accountService;
-    //MessageService messageService;
+    AccountService accountService;
+    MessageService messageService;
 
-    //public SocialMediaController(){
-        //accountService = 
-        //messageService = 
-    //}
-
+    public SocialMediaController(){
+        accountService = new AccountService(); 
+        messageService = new MessageService();
+    }
+ 
 
     @PostMapping(value = "/register")   // 1
-    public Account registerAccount(@RequestBody Account register){
-        return register;
+    public ResponseEntity registerAccount(@RequestBody Account register){
+        Account returnedAccount = new Account();
+        returnedAccount = accountService.registerAccount(register);
+        if(returnedAccount == null){
+            return ResponseEntity.status(409).body("Conflict");
+        }else if(returnedAccount.getAccountId() == null){
+            return ResponseEntity.status(400).body("Client error");
+        }
+        else{
+            return ResponseEntity.status(200).body(returnedAccount);
+        }
+        
     } 
        
     @PostMapping(value = "/login")      // 2
