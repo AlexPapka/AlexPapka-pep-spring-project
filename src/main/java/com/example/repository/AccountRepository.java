@@ -1,26 +1,27 @@
 package com.example.repository;
 
+
 import com.example.entity.Account;
 
 import java.sql.*;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-public interface AccountRepository {
+@Repository
+public interface AccountRepository extends JpaRepository<Account, Long>{
 
-    static Account registerAccount(Account account){
-        
-        
-        return account;
-    }
-    @Autowired
-    static String getAccount(Account account){
-        String sql = "SELECT * FROM account WHERE username = ?";
-         
-        
-        
-        
-        return null;
-    }
+      
+            
+    @Query("FROM account WHERE username = ?1")
+    Account findByUsername(String username);
+
+    @Query("INSERT INTO account (username,password) VALUES (?1, ?2)")
+    Account registerAccount(@Param("username") String username,@Param("password") String password);
+    
 } 
  

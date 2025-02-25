@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 
 import com.example.service.AccountService;
 import com.example.service.MessageService;
@@ -27,12 +29,13 @@ import com.example.entity.Account;
  */ 
 @RestController
 public class SocialMediaController {
-    AccountService accountService;
-    MessageService messageService;
+    private final AccountService accountService;
+    private final MessageService messageService;
 
-    public SocialMediaController(){
-        accountService = new AccountService(); 
-        messageService = new MessageService();
+    @Autowired
+    public SocialMediaController(AccountService accountService, MessageService messageService){
+        this.accountService = accountService; 
+        this.messageService = messageService;
     }
  
 

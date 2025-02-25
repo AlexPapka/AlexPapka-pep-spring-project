@@ -19,7 +19,7 @@ username varchar(255) not null unique,
 password varchar(255)
 ```
 
-### Message
+### Message 
 ```
 messageId integer primary key auto_increment,
 postedBy integer,
