@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import com.example.entity.Account;
 import com.example.repository.AccountRepository;
 
-@Service
+
+
+@Service("AccountService")
 public class AccountService {
 
     private final AccountRepository accountRepository;
@@ -15,7 +17,7 @@ public class AccountService {
     public AccountService(AccountRepository accountRepository){
         this.accountRepository = accountRepository;
     }
-
+    
     public Account registerAccount(Account account){
         if(account.getUsername() == ""){
             return null;
@@ -23,13 +25,20 @@ public class AccountService {
         if(account.getPassword().length() <= 4){
             return null;
         }
-        if(accountRepository.findByUsername(account.getUsername()).getUsername() == account.getUsername()){   // will be null if no account
+        if(accountRepository.findByUsername(account.getUsername()) == null){   // will be null if no account
+            
+        }else{
             return account; // returns an account with no id
         }
         
-        Account returnedAccount = new Account();
-        returnedAccount = accountRepository.registerAccount(account.getUsername(), account.getPassword());
-        return returnedAccount;
+        
+        return accountRepository.save(account);
+    }
+
+    public Account loginAccount(Account account){
+
+
+        return accountRepository.findByUsername(account.getUsername());
     }
 
 

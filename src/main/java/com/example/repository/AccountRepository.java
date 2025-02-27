@@ -12,16 +12,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Repository("AccountRepository")
 public interface AccountRepository extends JpaRepository<Account, Long>{
 
       
-            
-    @Query("FROM account WHERE username = ?1")
-    Account findByUsername(String username);
+       
+    @Query("SELECT a FROM Account a WHERE a.username = :username")
+    Account findByUsername(@Param("username") String username);
 
-    @Query("INSERT INTO account (username,password) VALUES (?1, ?2)")
-    Account registerAccount(@Param("username") String username,@Param("password") String password);
-    
 } 
  

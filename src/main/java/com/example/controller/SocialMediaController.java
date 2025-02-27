@@ -1,5 +1,9 @@
 package com.example.controller;
 
+import java.util.ArrayList;
+import java.sql.*;
+import java.util.List;
+
 import org.jboss.logging.Messages;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,15 +42,15 @@ public class SocialMediaController {
         this.messageService = messageService;
     }
  
-
+     
     @PostMapping(value = "/register")   // 1
     public ResponseEntity registerAccount(@RequestBody Account register){
         Account returnedAccount = new Account();
         returnedAccount = accountService.registerAccount(register);
         if(returnedAccount == null){
-            return ResponseEntity.status(409).body("Conflict");
-        }else if(returnedAccount.getAccountId() == null){
             return ResponseEntity.status(400).body("Client error");
+        }else if(returnedAccount.getAccountId() == null){
+            return ResponseEntity.status(409).body("Conflict");
         }
         else{
             return ResponseEntity.status(200).body(returnedAccount);
@@ -55,23 +59,44 @@ public class SocialMediaController {
     } 
        
     @PostMapping(value = "/login")      // 2
-    public Account loginAccount(@RequestBody Account login){
-        return login;
+    public ResponseEntity loginAccount(@RequestBody Account login){
+        Account returnedAccount = new Account();
+        returnedAccount = accountService.loginAccount(login);
+        if(returnedAccount == null){
+            return ResponseEntity.status(401).body("Unauthorized"); 
+        }
+        if(returnedAccount.getPassword().equals(login.getPassword())){
+            return ResponseEntity.status(200).body(returnedAccount);
+        }
+        else{
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+        
     }
 
     @PostMapping(value = "/messages")   // 3
-    public Message postMessage(@RequestBody Message message){
-        return message;
+    public ResponseEntity postMessage(@RequestBody Message message){
+        Message returnedMessage = new Message();
+        returnedMessage = messageService.postMessage(message);
+        if(returnedMessage == null){
+            return ResponseEntity.status(400).body("Client error");
+        }
+        return ResponseEntity.status(200).body(returnedMessage);
     }
 
     @GetMapping("/messages")            // 4
-    public Message getMessage(){
-        return null;
+    public ResponseEntity getMessage(){
+        List<Message> returnedMessage = new ArrayList<>();
+        returnedMessage = messageService.getMessages();
+        return ResponseEntity.status(200).body(returnedMessage);
     }
 
     @GetMapping("/messages/{messageId}")// 5
-    public Message getMessageById(@PathVariable String messageId){
-        return null;
+    public ResponseEntity getMessageById(@PathVariable String messageId){
+        Message returnedMessage = new Message();
+        returnedMessage = messageService.getMessageById(messageId);
+        return ResponseEntity.status(200).body(returnedMessage);
+        
     }
 
     @DeleteMapping("/messages/{messageId}")// 6
