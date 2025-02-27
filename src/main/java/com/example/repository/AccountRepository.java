@@ -13,12 +13,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository("AccountRepository")
-public interface AccountRepository extends JpaRepository<Account, Long>{
+public interface AccountRepository extends JpaRepository<Account, Integer>{
 
       
        
     @Query("SELECT a FROM Account a WHERE a.username = :username")
     Account findByUsername(@Param("username") String username);
 
+    @Query("SELECT a FROM Account a WHERE a.accountId = :accountId")
+    Account findAccountByMessageId(@Param("accountId") int accountId);
 } 
  

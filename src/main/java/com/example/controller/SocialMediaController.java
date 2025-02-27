@@ -92,7 +92,7 @@ public class SocialMediaController {
     }
 
     @GetMapping("/messages/{messageId}")// 5
-    public ResponseEntity getMessageById(@PathVariable String messageId){
+    public ResponseEntity getMessageById(@PathVariable int messageId){
         Message returnedMessage = new Message();
         returnedMessage = messageService.getMessageById(messageId);
         return ResponseEntity.status(200).body(returnedMessage);
@@ -100,18 +100,35 @@ public class SocialMediaController {
     }
 
     @DeleteMapping("/messages/{messageId}")// 6
-    public int deleteMessageById(@PathVariable String messageId){
-        return 0;
+    public ResponseEntity deleteMessageById(@PathVariable int messageId){
+        boolean deleted;
+        deleted = messageService.deleteMessageById(messageId);
+        if(deleted){
+            return ResponseEntity.status(200).body(1);
+        }else{
+            return ResponseEntity.status(200).body("");
+        }
+        
     }
 
     @PatchMapping("/messages/{messageId}")// 7
-    public Message patchMessageById(@PathVariable String messageId){
-        return null;
+    public ResponseEntity patchMessageById(@PathVariable int messageId, @RequestBody Message messageText){
+        Message returnedMessage = new Message();
+        returnedMessage = messageService.patchMessage(messageText.getMessageText(), messageId);
+        if(returnedMessage == null){
+            return ResponseEntity.status(400).body("Client error");
+        }else{
+            return ResponseEntity.status(200).body(1);
+        }
     }
 
     @GetMapping("/accounts/{accountId}/messages")// 8
-    public Message getMessagesByAccount(@PathVariable String accountId){
-        return null;
+    public ResponseEntity getMessagesByAccount(@PathVariable int accountId){
+        List<Message> returnedMessages = new ArrayList<>();
+        returnedMessages = messageService.getMessagesByAccount(accountId);
+
+        return ResponseEntity.status(200).body(returnedMessages);
+        
     }
 
 
